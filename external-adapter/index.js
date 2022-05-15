@@ -1,5 +1,6 @@
 const { Requester, Validator } = require('@chainlink/external-adapter');
-const sanityClient = require('@sanity/client')
+const sanityClient = require('@sanity/client');
+const { utils } = require('ethers');
 
 // Define custom parameters to be used by the adapter.
 // Extra parameters can be stated in the extra object,
@@ -14,8 +15,8 @@ const createRequest = (input, callback) => {
   // The Validator helps you validate the Chainlink request data
   const validator = new Validator(callback, input, customParams)
   const jobRunID = validator.validated.id;
-  const walletAddr = validator.validated.data.walletAddr;
-
+  let walletAddr = validator.validated.data.walletAddr;
+  walletAddr = utils.getAddress(walletAddr);
 
   const client = sanityClient({
     projectId: process.env.PROJECT_ID , //'jo5awq67',
