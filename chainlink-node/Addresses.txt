@@ -1,2 +1,3 @@
 Oracle Address on Rinkeby: 0xf8b64a4273F13C2521ACC715d3022b8Bd31e1bE8
-API Consumer Contract Address on Rinkeby: 0x83F6427B76b22F91C74F8eA859c617a12EdB6608
+Operator Address on Rinkeby: 0x51CE786075cBe0Dc21869Cc4273Cb98720436aA7
+Contract Address on Rinkeby: 0xbc7d460Cd6Eb84c5EAE9297e1fb4D8Be3cD96211

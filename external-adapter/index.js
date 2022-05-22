@@ -19,11 +19,11 @@ const createRequest = (input, callback) => {
   walletAddr = utils.getAddress(walletAddr);
 
   const client = sanityClient({
-    projectId: process.env.PROJECT_ID , //'jo5awq67',
+    projectId: process.env.PROJECT_ID ,
     dataset: 'production',
-    apiVersion: '2021-04-27', // use current UTC date - see "specifying API version"!
-    token: process.env.API_TOKEN, //'sk6LafQBoX1qWHZrp4IlomQgDL7c51WKk1hSbsXWaU2c8WpVnOYNXrZYF0IYP5LBz1mdD9vUz6HSTuaeefyPWTGVhQEpCZfArezyW6xj8lNVZW7G5f6Yf8LPvzmVZWQArCiH7bCC72tF913ldPLRFivTLvHMbzBU4WKJD7SQ4xeAcEqBvJav', // or leave blank for unauthenticated usage
-    useCdn: false, // `false` if you want to ensure fresh data
+    apiVersion: '2021-04-27', 
+    token: process.env.API_TOKEN, 
+    useCdn: false,
   });
   const query = `*[_type == "user" && walletAddress == $walletAddr] {isVerified, signupDate, walletAddress}`
   const params = {walletAddr};
@@ -39,8 +39,8 @@ const createRequest = (input, callback) => {
 
   })
   .catch(error => {
-      callback(500, Requester.errored(jobRunID, error))
-    })
+    callback(500, Requester.errored(jobRunID, error))
+  })
 }
 
 // This is a wrapper to allow the function to work with

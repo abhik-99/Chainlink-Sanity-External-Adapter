@@ -32,8 +32,8 @@ contract OurSanityToken is ERC20, ERC20Burnable, AccessControl, ChainlinkClient 
         _grantRole(WHITELISTED_ROLE, msg.sender);
         
         setPublicChainlinkToken();
-        _oracle = 0xf8b64a4273F13C2521ACC715d3022b8Bd31e1bE8;
-        _jobId = "964b51813f90460aa3de6f17076e7b9a";
+        _oracle = 0x51CE786075cBe0Dc21869Cc4273Cb98720436aA7;
+        _jobId = "efde17c8f1744470b08434d147b5af7e";
         _fee = 0 * LINK_DIVISIBILITY; // (Varies by network and job)
     }
 
@@ -67,19 +67,25 @@ contract OurSanityToken is ERC20, ERC20Burnable, AccessControl, ChainlinkClient 
         requestId = sendChainlinkRequestTo(_oracle, request, _fee);
     }
 
-    function fulfill(bytes32 _requestId, address _walletAddress, bool _isVerified, bool _qualified)
+    function fulfill(bytes32 _requestId, bytes memory _walletAddress, bool _isVerified, bool _qualified)
     public
     recordChainlinkFulfillment(_requestId) {
+        address addr = bytesToAddress(_walletAddress);
+        users[addr].isVerified = _isVerified;
+        users[addr].qualified = _qualified;
 
-        users[_walletAddress].isVerified = _isVerified;
-        users[_walletAddress].qualified = _qualified;
-
-        emit ReqFulfilled(_walletAddress, _isVerified, _qualified);
+        emit ReqFulfilled(addr, _isVerified, _qualified);
     }
 
     function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual override {
         super._beforeTokenTransfer(from, to, amount);
         require(hasRole(WHITELISTED_ROLE, msg.sender) || (users[msg.sender].isVerified && users[msg.sender].qualified), "User not permitted");
+    }
+
+    function bytesToAddress(bytes memory _addr) private pure returns(address addr) {
+        assembly {
+        addr := mload(add(_addr, 20))
+    }
     }
     
 }

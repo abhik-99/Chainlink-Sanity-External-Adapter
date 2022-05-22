@@ -1,9 +1,9 @@
 type = "directrequest"
 schemaVersion = 1
 name = "(Get > x2 Bool)"
+externalJobID = "efde17c8-f174-4470-b084-34d147b5af7e"
 maxTaskDuration = "0s"
-contractAddress = "0xf8b64a4273F13C2521ACC715d3022b8Bd31e1bE8"
-minContractPaymentLinkJuels = 0
+contractAddress = "0x51CE786075cBe0Dc21869Cc4273Cb98720436aA7"
 minIncomingConfirmations = 0
 observationSource = """
     decode_log   [type="ethabidecodelog"
@@ -16,12 +16,12 @@ observationSource = """
     parseVerified     [type="jsonparse" path="data,isVerified" data="$(fetch)"]
     parseQualified     [type="jsonparse" path="data,qualified" data="$(fetch)"]
     parseWallet     [type="jsonparse" path="data,walletAddress" data="$(fetch)"]
-    encode_data     [type="ethabiencode" abi="(bytes32 requestId, address walletAddress, bool isVerified, bool qualified)" data="{ \\"requestId\\": $(decode_log.requestId), \\"isVerified\\": $(parseVerified), \\"qualified\\": $(parseQualified), \\"walletAddress\\": $(parseWallet)}"]
+    encode_data     [type="ethabiencode" abi="(bytes32 requestId, bytes walletAddress, bool isVerified, bool qualified)" data="{ \\"requestId\\": $(decode_log.requestId), \\"isVerified\\": $(parseVerified), \\"qualified\\": $(parseQualified), \\"walletAddress\\": $(parseWallet)}"]
     encode_tx       [type="ethabiencode"
-                      abi="fulfillOracleRequest(bytes32 requestId, uint256 payment, address callbackAddress, bytes4 callbackFunctionId, uint256 expiration, bytes calldata data)"
+                      abi="fulfillOracleRequest2(bytes32 requestId, uint256 payment, address callbackAddress, bytes4 callbackFunctionId, uint256 expiration, bytes calldata data)"
                       data="{\\"requestId\\": $(decode_log.requestId), \\"payment\\": $(decode_log.payment), \\"callbackAddress\\": $(decode_log.callbackAddr), \\"callbackFunctionId\\": $(decode_log.callbackFunctionId), \\"expiration\\": $(decode_log.cancelExpiration), \\"data\\": $(encode_data)}"
                     ]
-    submit_tx    [type="ethtx" to="0xf8b64a4273F13C2521ACC715d3022b8Bd31e1bE8" data="$(encode_tx)"]
+    submit_tx    [type="ethtx" to="0x51CE786075cBe0Dc21869Cc4273Cb98720436aA7" data="$(encode_tx)"]
 
     decode_log -> decode_cbor -> fetch -> parseVerified -> parseQualified -> parseWallet -> encode_data -> encode_tx -> submit_tx
 """
